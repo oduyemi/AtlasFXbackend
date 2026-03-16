@@ -1,25 +1,32 @@
 import { Controller, Post, Body } from "@nestjs/common";
 import { WalletsService } from "./wallets.service";
+import { CurrentUser } from "src/common/decorators/current-user.decorator";
+
 
 
 @Controller("wallet")
 export class WalletsController {
   constructor(private walletService: WalletsService) {}
+
   @Post("fund")
-  fundWallet(@Body() body) {
-    return this.walletService.fundWallet(
-      body.userId,
-      body.amount
-    )
+  async fundWallet(
+    @CurrentUser() user, 
+    @Body() body: { amount: number } 
+  ) {
+    return this.walletService.fundWallet(user.userId, body.amount);
   }
 
+  
   @Post("convert")
-  convert(@Body() body) {
+  async convert(
+    @CurrentUser() user,
+    @Body() body: { from: string; to: string; amount: number }
+  ) {
     return this.walletService.convertCurrency(
-      body.userId,
+      user.userId,
       body.from,
       body.to,
       body.amount
-    )
+    );
   }
 }

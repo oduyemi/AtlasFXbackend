@@ -19,9 +19,7 @@ export class AuthService {
     
         @InjectRepository(Otp)
         private otpRepository: Repository<Otp>,
-    
         private walletService: WalletsService,
-    
         private jwtService: JwtService
     
     ) {}
