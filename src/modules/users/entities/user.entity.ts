@@ -1,21 +1,25 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm"
-import { Wallet } from "@/wallets/entities/wallet.entity"
-
-@Entity()
-export class User {
-
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn
+ } from "typeorm"
+ 
+ @Entity()
+ export class User {
+ 
   @PrimaryGeneratedColumn()
   id: number
-
-  @Column({ unique: true })
+ 
+  @Column({ unique:true })
   email: string
-
+ 
   @Column()
   password: string
-
-  @Column({ default: false })
+ 
+  @Column({ default:false })
   isVerified: boolean
-
-  @OneToOne(() => Wallet, wallet => wallet.user)
-  wallet: Wallet
-}
+ 
+  @CreateDateColumn()
+  createdAt: Date
+ }

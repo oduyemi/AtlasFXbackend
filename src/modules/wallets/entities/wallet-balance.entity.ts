@@ -1,7 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
-import { Wallet } from "./wallet.entity"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Wallet } from "./wallet.entity";
+import { Unique } from "typeorm";
+
+
 
 @Entity()
+@Unique(["wallet","currency"])
 export class WalletBalance {
 
   @PrimaryGeneratedColumn()

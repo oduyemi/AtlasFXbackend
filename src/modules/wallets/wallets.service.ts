@@ -24,6 +24,26 @@ export class WalletsService {
 
   ) {}
 
+  async createWallet(userId: number) {
+
+    const wallet = this.walletRepository.create({
+     user: { id: userId }
+    })
+   
+    return this.walletRepository.save(wallet)
+   }
+   
+   async createCurrency(walletId: number, currency: string) {
+   
+    const balance = this.balanceRepository.create({
+     wallet: { id: walletId },
+     currency,
+     balance: 0
+    })
+   
+    return this.balanceRepository.save(balance)
+   }
+
   async fundWallet(userId: number, amount: number) {
 
     if (amount <= 0)
