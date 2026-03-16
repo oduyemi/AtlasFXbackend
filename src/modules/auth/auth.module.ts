@@ -6,18 +6,22 @@ import { User } from "../users/entities/user.entity";
 import { Otp } from "./entities/otp.entity";
 import { WalletsModule } from "../wallets/wallets.module";
 import { JwtModule } from "@nestjs/jwt";
+import { ScheduleModule } from "@nestjs/schedule";
+import { PassportModule } from "@nestjs/passport";
 
 
 @Module({
- imports: [
-  TypeOrmModule.forFeature([User, Otp]),
-  WalletsModule,
-  JwtModule.register({
-   secret: "secretKey",
-   signOptions: { expiresIn: "1d" }
-  })
- ],
- providers: [AuthService],
- controllers: [AuthController]
+  imports: [
+    TypeOrmModule.forFeature([User, Otp]),
+    PassportModule,
+    WalletsModule,
+    ScheduleModule.forRoot(),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET_KEY,
+      signOptions: { expiresIn: "1d" }
+    })
+  ],
+  providers: [AuthService],
+  controllers: [AuthController]
 })
 export class AuthModule {}

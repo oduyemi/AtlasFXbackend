@@ -1,16 +1,14 @@
-import { Module } from "@nestjs/common"
-import { TypeOrmModule } from "@nestjs/typeorm"
-
-import { databaseConfig } from "./config/database.config"
-
-import { WalletsModule } from "./modules/wallets/wallets.module"
-import { FxModule } from "./modules/fx/fx.module"
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { AppController } from "./app.controller";
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(databaseConfig),
-    WalletsModule,
-    FxModule
-  ]
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+  ],
+  controllers: [AppController],
+  providers: [],
 })
 export class AppModule {}
