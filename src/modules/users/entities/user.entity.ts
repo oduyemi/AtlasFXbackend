@@ -9,17 +9,23 @@ import {
  export class User {
  
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
+
+  @Column()
+  fname: string;
+
+  @Column()
+  lname: string;
  
-  @Column({ unique:true })
-  email: string
+  @Column({ unique: true })
+  email: string;
  
   @Column()
-  password: string
+  password: string;
  
-  @Column({ default:false })
-  isVerified: boolean
+  @Column({ default: false })
+  isVerified: boolean;
  
   @CreateDateColumn()
-  createdAt: Date
+  createdAt: Date;
  }
