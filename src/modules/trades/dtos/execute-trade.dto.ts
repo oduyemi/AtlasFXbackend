@@ -5,11 +5,11 @@ import { Currency } from "src/common/enums/currency.enum";
 
 
 export class ExecuteTradeDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'NGN' })
   @IsEnum(Currency)
   toCurrency: Currency;
 
-  @ApiProperty()
+  @ApiProperty({ example: 100 })
   @IsNumber()
   @IsPositive()
   amount: number;

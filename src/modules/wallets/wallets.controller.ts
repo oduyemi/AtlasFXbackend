@@ -6,8 +6,9 @@ import { Currency } from "src/common/enums/currency.enum";
 import { ConvertCurrencyDto } from "./dtos/convert-currency.dto";
 import { TradesService } from "../trades/trades.service";
 import { ExecuteTradeDto } from "../trades/dtos/execute-trade.dto";
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
-
+@ApiTags('wallet')
 @UseGuards(JwtAuthGuard)
 @Controller("wallet")
 export class WalletsController {
@@ -16,11 +17,15 @@ export class WalletsController {
     private tradeService: TradesService
   ) {}
   @Get()
+  @ApiOperation({ summary: 'Get user wallet balances by currency' })
+  @ApiResponse({ status: 201, description: 'Wallet ID, Balances' })
   async getWallet(@CurrentUser() user) {
     return this.walletService.getWallet(user.userId);
   }
 
   @Post("fund")
+  @ApiOperation({ summary: 'Fund wallets in NGN or other currencies' })
+  @ApiResponse({ status: 201, description: 'ID, currency, balance' })
   async fundWallet(
     @CurrentUser() user,
     @Body() body: { currency: Currency; amount: number }
@@ -34,6 +39,8 @@ export class WalletsController {
 
   
   @Post("convert")
+  @ApiOperation({ summary: 'Convert between currencies using real-time FX rates' })
+  @ApiResponse({ status: 201, description: 'Transaction details' })
   convert(
     @Req() req,
     @Body() dto: ConvertCurrencyDto
@@ -47,6 +54,8 @@ export class WalletsController {
   }
   
   @Post("trade")
+  @ApiOperation({ summary: 'Trade naira with other currencies' })
+  @ApiResponse({ status: 201, description: 'Transaction details' })
   executeTrade(
     @CurrentUser() user,
     @Body() dto: ExecuteTradeDto
