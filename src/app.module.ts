@@ -6,6 +6,7 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { UsersModule } from "./modules/users/users.module";
 import { WalletsModule } from "./modules/wallets/wallets.module";
 import { TradesModule } from "./modules/trades/trades.module";
+import { TransactionsModule } from "./modules/transactions/transactions.module";
 
 
 @Module({
@@ -30,6 +31,7 @@ import { TradesModule } from "./modules/trades/trades.module";
     UsersModule,
     WalletsModule,
     TradesModule,
+    TransactionsModule
   ],
   controllers: [AppController],
 })

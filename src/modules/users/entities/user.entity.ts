@@ -3,7 +3,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn
- } from "typeorm"
+ } from "typeorm";
+ 
  
  @Entity()
  export class User {

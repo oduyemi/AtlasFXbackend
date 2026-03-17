@@ -9,21 +9,30 @@ import { JwtModule } from "@nestjs/jwt";
 import { ScheduleModule } from "@nestjs/schedule";
 import { PassportModule } from "@nestjs/passport";
 import { MailModule } from "../mail/mail.module"; 
+import { JwtStrategy } from "./jwt.strategy"; 
+import { ConfigService } from "@nestjs/config";
+
 
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Otp]),
     PassportModule,
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>("JWT_SECRET_KEY"),
+        signOptions: { expiresIn: "1d" },
+      }),
+    }),
     WalletsModule,
     MailModule,
     ScheduleModule.forRoot(),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET_KEY,
-      signOptions: { expiresIn: "1d" }
-    })
   ],
-  providers: [AuthService],
+  providers: [
+    AuthService, 
+    JwtStrategy,
+  ],
   controllers: [AuthController]
 })
 export class AuthModule {}

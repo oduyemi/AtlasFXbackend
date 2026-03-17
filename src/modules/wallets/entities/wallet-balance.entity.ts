@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { Wallet } from "./wallet.entity";
 import { Unique } from "typeorm";
-
+import { Currency } from "src/common/enums/currency.enum";
 
 
 @Entity()
@@ -14,8 +14,11 @@ export class WalletBalance {
   @ManyToOne(() => Wallet, wallet => wallet.balances)
   wallet: Wallet
 
-  @Column()
-  currency: string
+  @Column({
+    type: "enum",
+    enum: Currency
+  })
+  currency: Currency
 
   @Column("decimal", {
     precision: 18,

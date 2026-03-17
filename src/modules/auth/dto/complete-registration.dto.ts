@@ -1,15 +1,15 @@
-import { IsEmail, IsString, IsOptional, IsArray, IsIn } from "class-validator";
+import { IsEmail, IsEnum, IsOptional, IsArray } from "class-validator";
+import { Currency } from "src/common/enums/currency.enum";
 
 export class CompleteRegistrationDto {
-
   @IsEmail()
   email: string;
 
-  @IsString()
-  @IsIn(["NGN","USD","GBP","EUR"])
-  primaryCurrency: string;
+  @IsEnum(Currency)
+  primaryCurrency: Currency;
 
   @IsOptional()
   @IsArray()
-  otherCurrencies?: string[];
+  @IsEnum(Currency, { each: true })
+  otherCurrencies?: Currency[];
 }

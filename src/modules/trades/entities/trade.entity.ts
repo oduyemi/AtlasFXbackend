@@ -1,8 +1,10 @@
+import { User } from "src/modules/users/entities/user.entity";
 import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
-    CreateDateColumn
+    CreateDateColumn,
+    ManyToOne
    } from "typeorm";
    
     @Entity()
@@ -10,8 +12,8 @@ import {
         @PrimaryGeneratedColumn()
         id: number
        
-        @Column()
-        userId: number
+        @ManyToOne(() => User)
+        user: User; 
        
         @Column()
         fromCurrency: string

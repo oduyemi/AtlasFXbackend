@@ -10,7 +10,7 @@ export class Wallet {
 
   @OneToOne(() => User)
   @JoinColumn()
-  user: User
+  user: User;
 
   @OneToMany(() => WalletBalance, balance => balance.wallet)
   balances: WalletBalance[]

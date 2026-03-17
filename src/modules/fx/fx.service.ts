@@ -1,25 +1,16 @@
-import { Injectable } from "@nestjs/common"
-import axios from "axios"
+import { Injectable } from "@nestjs/common";
+import axios from "axios";
 
 @Injectable()
 export class FxService {
-    private cache = new Map<string, number>()
+  private API_KEY = process.env.FX_API_KEY!;
+  private BASE_URL = "https://v6.exchangerate-api.com/v6";
 
-    async getRate(from: string, to: string) {
-        const key = `${from}_${to}`
-        if (this.cache.has(key)) {
-        return this.cache.get(key)
-        }
-        
-        const response = await axios.get(
-        `https://open.er-api.com/v6/latest/${from}`
-        )
-        const rate = response.data.rates[to]
-        this.cache.set(key, rate)
-        setTimeout(() => {
-        this.cache.delete(key)
-        }, 60000)
-        
-        return rate
-    }
+  async getRate(from: string, to: string): Promise<number> {
+    const url = `${this.BASE_URL}/${this.API_KEY}/pair/${from}/${to}`;
+
+    const response = await axios.get(url);
+
+    return response.data.conversion_rate;
+  }
 }
