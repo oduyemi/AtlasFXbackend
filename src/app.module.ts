@@ -7,6 +7,7 @@ import { UsersModule } from "./modules/users/users.module";
 import { WalletsModule } from "./modules/wallets/wallets.module";
 import { TradesModule } from "./modules/trades/trades.module";
 import { TransactionsModule } from "./modules/transactions/transactions.module";
+import { FxModule } from "./modules/fx/fx.module";
 
 
 @Module({
@@ -31,7 +32,8 @@ import { TransactionsModule } from "./modules/transactions/transactions.module";
     UsersModule,
     WalletsModule,
     TradesModule,
-    TransactionsModule
+    TransactionsModule,
+    FxModule
   ],
   controllers: [AppController],
 })
