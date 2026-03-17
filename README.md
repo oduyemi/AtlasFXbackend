@@ -1,98 +1,457 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+#  AtlasFX API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+**AtlasFX** is a multi-currency wallet and FX trading backend built with **NestJS**, **TypeORM**, and **PostgreSQL**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+It enables users to:
 
-## Description
+* Register with OTP verification
+* Manage multi-currency wallets
+* Fund and convert currencies
+* Execute FX trades (NGN → foreign currencies)
+* Retrieve real-time exchange rates
+* Track transaction history
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Project setup
+#  Tech Stack
 
-```bash
-$ npm install
+* **Framework:** NestJS
+* **ORM:** TypeORM
+* **Database:** PostgreSQL
+* **Authentication:** JWT + OTP (Email Verification)
+* **Architecture:** Modular (Domain-driven)
+
+---
+
+#  Project Structure
+
+```
+src
+│
+├── config
+│   ├── database.config.ts
+│   ├── jwt.config.ts
+│
+├── modules
+│   ├── auth
+│   ├── users
+│   ├── wallets
+│   ├── trades
+│   ├── transactions
+│   ├── fx
+│
+├── common
+│   ├── decorators
+│   ├── guards
+│   ├── filters
+│
+├── app.module.ts
+└── main.ts
 ```
 
-## Compile and run the project
+---
+
+# ⚙️ Installation
 
 ```bash
-# development
-$ npm run start
+git clone <https://github.com/oduyemi/AtlasFXbackend>
+cd AtlaFXbackend
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+---
+
+# ⚙️ Environment Variables
+
+Create a `.env` file:
+
+```env
+PORT=3000
+
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USER=postgres
+DATABASE_PASSWORD=yourpassword
+DATABASE_NAME=atlasdb
+
+JWT_SECRET=syour-upersecret
+JWT_EXPIRES_IN=1d
+
+OTP_EXPIRY_MINUTES=5
+
+EMAIL=your-gmail-address
+EMAIL_PASS=your-app-password
+```
+
+---
+
+# ▶️ Running the App
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run start:dev
 ```
 
-## Deployment
+App runs at:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+```
+http://localhost:3000
+```
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+---
+
+# Supported Currencies
+
+The system supports a predefined set:
+
+```
+NGN, USD, EUR, GBP, AED
+```
+
+---
+
+# 🔐 Authentication Flow
+
+### 1. Register
+
+```
+POST /auth/register
+```
+
+Registers user and sends OTP (6-digit, expires in 5 minutes).
+
+```json
+{
+  "fname": "Yem",
+  "lname": "Yem",
+  "email": "yhermii@gmail.com",
+  "password": "12345678",
+  "confirmPassword": "12345678"
+}
+```
+
+---
+
+### 2. Verify OTP
+
+```
+POST /auth/verify
+```
+
+```json
+{
+  "email": "yhermii@gmail.com",
+  "otp": "447956"
+}
+```
+
+---
+
+### 3. Complete Registration
+
+```
+POST /auth/complete-registration
+```
+
+User selects currencies → wallet is created automatically.
+
+```json
+{
+  "email": "yhermii@gmail.com",
+  "primaryCurrency": "NGN",
+  "otherCurrencies": ["USD", "EUR"]
+}
+```
+
+---
+
+### 4. Login
+
+```
+POST /auth/login
+```
+
+```json
+{
+  "email": "yhermii@gmail.com",
+  "password": "12345678"
+}
+```
+
+Returns JWT token
+
+---
+
+#  Authorization
+
+All protected routes require:
+
+```
+Authorization: Bearer <token>
+```
+
+---
+
+#  Wallet Endpoints
+
+---
+
+##  Get Wallet
+
+```
+GET /wallet
+```
+
+Returns user wallet balances.
+
+---
+
+##  Fund Wallet
+
+```
+POST /wallet/fund
+```
+
+```json
+{
+  "currency": "NGN",
+  "amount": 300000
+}
+```
+
+---
+
+##  Convert Currency (Flexible)
+
+```
+POST /wallet/convert
+```
+
+Convert between any currencies.
+
+```json
+{
+  "from": "USD",
+  "to": "EUR",
+  "amount": 5
+}
+```
+
+---
+
+## Trade (NGN → Foreign Currency)
+
+```
+POST /wallet/trade
+```
+
+```json
+{
+  "toCurrency": "USD",
+  "amount": 100000
+}
+```
+
+---
+
+# Trade Execution Flow
+
+```
+POST /wallet/trade
+   ↓
+TradesService.executeTrade()
+   ↓
+1. Fetch FX rate
+2. Debit NGN wallet
+3. Credit target currency
+4. Save trade record
+```
+
+---
+
+## Internal Logic
+
+### Step 1 — Get FX Rate
+
+```ts
+const rate = await this.fxService.getRate(from, to);
+```
+
+---
+
+### Step 2 — Convert Amount
+
+```ts
+const convertedAmount = amount * rate;
+```
+
+---
+
+### Step 3 — Debit Source
+
+```ts
+await this.walletService.debit(userId, from, amount);
+```
+
+---
+
+### Step 4 — Credit Destination
+
+```ts
+await this.walletService.credit(userId, to, convertedAmount);
+```
+
+---
+
+### Step 5 — Persist Trade
+
+```ts
+return this.tradeRepository.save(trade);
+```
+
+---
+
+## Example Response
+
+```json
+{
+  "tradeId": 1,
+  "from": "NGN",
+  "to": "USD",
+  "amount": 100000,
+  "convertedAmount": 72.735,
+  "rate": 0.00072735,
+  "status": "SUCCESS"
+}
+```
+
+---
+
+# FX Endpoints
+
+---
+
+## Get Exchange Rates
+
+```
+GET /fx/rates?to=USD
+```
+
+Returns current exchange rates.
+
+---
+
+# Transactions
+
+---
+
+## Get Transaction History
+
+```
+GET /transactions
+```
+
+Returns:
+
+* deposits
+* conversions
+* trades
+
+---
+
+# Wallet System Design
+
+Each user has:
+
+```
+1 Wallet
+   ├── Primary Currency
+   ├── Secondary Currency
+   ├── Tertiary Currency
+```
+
+Each wallet contains multiple balances:
+
+```
+Wallet
+ ├── NGN balance
+ ├── USD balance
+ ├── EUR balance
+```
+
+---
+
+# Conversion Types
+
+AtlasFX supports **two conversion flows**:
+
+---
+
+## 1. `/wallet/trade`
+
+* Only: **NGN → Foreign currency**
+* Used for trading
+* Logged as a **trade**
+
+---
+
+## 2. `/wallet/convert`
+
+* Any currency → any currency
+* Internal FX conversion
+* Logged as a **transaction**
+
+---
+
+# Architecture Highlights
+
+* Modular NestJS design
+* Transaction-safe wallet operations
+* FX rate caching
+* Secure JWT authentication
+* Clean separation of concerns
+* Reusable decorators & guards
+* Global error handling
+
+---
+
+# Testing
+
+Run tests:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run test
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Includes:
 
-## Resources
+* Unit tests (controllers/services)
+* Mocked dependencies
+* Isolated business logic
 
-Check out a few resources that may come in handy when working with NestJS:
+---
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# 🛡️ Security
 
-## Support
+* JWT authentication
+* Password hashing (bcrypt)
+* OTP verification system
+* Guard-based route protection
+* No userId trust from client (derived from token)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+# Future Improvements
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+* Swagger API documentation
+* Rate limiting (auth endpoints)
+* Redis caching for FX rates
+* WebSocket live rates
+* Audit logs
+* Role-based access control (RBAC)
 
-## License
+---
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+# 👨‍💻 Author
+
+**Opeyemi Oduyemi – Technical Assessment Submission**
