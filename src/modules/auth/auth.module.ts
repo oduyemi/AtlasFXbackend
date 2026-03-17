@@ -8,6 +8,7 @@ import { WalletsModule } from "../wallets/wallets.module";
 import { JwtModule } from "@nestjs/jwt";
 import { ScheduleModule } from "@nestjs/schedule";
 import { PassportModule } from "@nestjs/passport";
+import { MailModule } from "../mail/mail.module"; 
 
 
 @Module({
@@ -15,6 +16,7 @@ import { PassportModule } from "@nestjs/passport";
     TypeOrmModule.forFeature([User, Otp]),
     PassportModule,
     WalletsModule,
+    MailModule,
     ScheduleModule.forRoot(),
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,

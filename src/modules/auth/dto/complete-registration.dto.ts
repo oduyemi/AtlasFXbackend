@@ -1,5 +1,15 @@
+import { IsEmail, IsString, IsOptional, IsArray, IsIn } from "class-validator";
+
 export class CompleteRegistrationDto {
-    email: string
-    primaryCurrency: string
-    otherCurrencies: string[]
-  }
+
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @IsIn(["NGN","USD","GBP","EUR"])
+  primaryCurrency: string;
+
+  @IsOptional()
+  @IsArray()
+  otherCurrencies?: string[];
+}
